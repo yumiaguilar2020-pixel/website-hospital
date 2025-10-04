@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dr. Aguilar Medical Hospital — Project</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a2d9b6d9d0.js" crossorigin="anonymous"></script>
+  <!-- Chart.js for interactive charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg:#f6fbff;
+      --blue-1:#0b6cf3;
+      --blue-2:#1e90ff;
+      --glass: rgba(255,255,255,0.12);
+      --muted:#6b7280;
+      --card-shadow: 0 10px 30px rgba(11,108,243,0.08);
+      --accent: linear-gradient(135deg,var(--blue-1),var(--blue-2));
+      --glass-border: rgba(255,255,255,0.25);
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    html,body{height:100%;margin:0;background:radial-gradient(circle at 10% 10%, rgba(14,120,255,0.06), transparent 10%), var(--bg); color:#0b2140}
+
+    /* top navigation */
+    .nav{position:sticky;top:12px;margin:18px auto;max-width:1200px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.5));box-shadow:var(--card-shadow);backdrop-filter: blur(6px);border:1px solid var(--glass-border)}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:56px;height:56px;object-fit:contain;border-radius:12px;filter:drop-shadow(0 6px 24px rgba(13, 110, 253,0.12))}
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+    .nav-links{display:flex;gap:12px;align-items:center}
+    .nav-links a{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--blue-1);font-weight:600}
+    .cta{background:var(--accent);color:white;padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(14,120,255,0.16);display:inline-flex;gap:8px;align-items:center}
+
+    /* hero */
+    .hero{max-width:1200px;margin:28px auto;padding:36px;border-radius:20px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center}
+    .hero-left{padding:26px;background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.55));border-radius:16px;box-shadow:var(--card-shadow);backdrop-filter: blur(6px);border:1px solid var(--glass-border)}
+    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg, rgba(11,108,243,0.12), rgba(30,144,255,0.08));font-weight:700;color:var(--blue-1);margin-bottom:12px}
+    .hero h2{margin:6px 0 8px;font-size:28px}
+    .hero p{margin:0;color:var(--muted);line-height:1.5}
+    .hero-actions{display:flex;gap:12px;margin-top:18px}
+    .glass-card{background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.48));padding:18px;border-radius:14px;border:1px solid var(--glass-border);box-shadow:var(--card-shadow)}
+
+    /* floating stats */
+    .stats{display:flex;gap:12px;margin-top:18px}
+    .stat{flex:1;padding:14px;border-radius:12px;background:linear-gradient(180deg,#ffffff, rgba(11,108,243,0.02));display:flex;flex-direction:column;gap:6px}
+    .stat .num{font-size:20px;font-weight:700;color:var(--blue-1)}
+    .stat small{color:var(--muted)}
+
+    /* hero-right visuals */
+    .hero-right{display:flex;flex-direction:column;gap:12px}
+    .visual{height:320px;border-radius:14px;overflow:hidden;position:relative;background:linear-gradient(135deg, rgba(11,108,243,0.06), rgba(30,144,255,0.02));display:flex;align-items:center;justify-content:center}
+    .visual img{max-width:92%;max-height:92%;opacity:0.98}
+    .floating-pulse{position:absolute;inset:auto -40px -40px auto;width:160px;height:160px;border-radius:999px;background:radial-gradient(circle at 20% 20%, rgba(30,144,255,0.18), transparent 40%);filter:blur(12px)}
+
+    /* services */
+    .section{max-width:1200px;margin:28px auto;padding:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .service{padding:18px;border-radius:12px;background:white;box-shadow:0 8px 30px rgba(16,24,40,0.04);border-left:6px solid rgba(11,108,243,0.08)}
+    .service h4{margin:0 0 6px}
+    .service p{margin:0;color:var(--muted);font-size:14px}
+
+    /* pricing */
+    .pricing{display:flex;gap:12px;flex-wrap:wrap}
+    .price-card{flex:1;min-width:220px;padding:18px;border-radius:14px;background:linear-gradient(180deg,#fff, #f6fbff);box-shadow:var(--card-shadow);border:1px solid rgba(11,108,243,0.04)}
+    .price-card h3{margin:0 0 6px}
+    .price{font-weight:800;font-size:20px;color:var(--blue-1)}
+
+    /* budget chart */
+    .budget-wrap{display:flex;gap:18px;flex-wrap:wrap}
+    .chart-box{flex:1;min-width:300px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#ffffff, rgba(11,108,243,0.02));border:1px solid rgba(11,108,243,0.04);box-shadow:var(--card-shadow)}
+
+    /* footer */
+    footer{max-width:1200px;margin:28px auto;padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(11,108,243,0.04),rgba(30,144,255,0.02));display:flex;justify-content:space-between;align-items:center}
+
+    /* cards and micro animations */
+    .pulse{animation:pulse 3s infinite}
+    @keyframes pulse{0%{transform:scale(1);opacity:0.98}50%{transform:scale(1.02);opacity:1}100%{transform:scale(1);opacity:0.98}}
+
+    /* responsive */
+    @media (max-width:940px){
+      .hero{grid-template-columns:1fr;}
+      .hero-right{order:-1}
+      .nav{margin:14px}
+    }
+
+    /* small helpers */
+    .muted{color:var(--muted);font-size:13px}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(11,108,243,0.06);font-weight:700}
+
+    /* cool neon divider */
+    .neon{height:4px;background:linear-gradient(90deg, rgba(11,108,243,0), rgba(30,144,255,0.8), rgba(11,108,243,0));border-radius:4px;margin:18px 0}
+
+    /* form */
+    .contact{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .contact input,.contact textarea{padding:10px;border-radius:10px;border:1px solid rgba(11,108,243,0.06)}
+    .contact textarea{grid-column:1/-1;min-height:120px}
+
+    /* fancy badge */
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(11,108,243,0.08);border-radius:12px;font-weight:700}
+
+  </style>
+</head>
+<body>
+
+  <div class="nav" role="navigation">
+    <div class="brand">
+      <div>
+        <h1>Dr. Aguilar Medical Hospital</h1>
+        <p>De-kalidad. Maaasahan. Maka-tao.</p>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#services">Mga Serbisyo</a>
+      <a href="#pricing">Presyo</a>
+      <a href="#budget">Badyet</a>
+      <a href="#contact">Kontak</a>
+      <a class="cta" href="#contact"><i class="fas fa-phone"></i> Magpa-Appointment</a>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="hero-left">
+        <span class="tag">Paggawa ng Info Sheet: Meaning Business Plan</span>
+        <h2>Dr. Aguilar Medical Hospital — Serbisyong Pangkalusugan para sa Lahat</h2>
+        <p>Layunin: Magbigay ng de-kalidad, maaasahan, at abot-kayang serbisyong medikal. Inspirasyon: Tita Neri — isang nars na nagbigay-daan sa aming pangarap.</p>
+
+        <div class="stats">
+          <div class="stat glass-card pulse">
+            <div class="num">₱50,000,000</div>
+            <small>Kabuuang Kapital (Halimbawa)</small>
+          </div>
+          <div class="stat glass-card">
+            <div class="num">24/7</div>
+            <small>Emergency & ICU</small>
+          </div>
+          <div class="stat glass-card">
+            <div class="num">+Specialties</div>
+            <small>Cardiology, Pediatrics, Surgery, OB-Gyne</small>
+          </div>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:12px;">
+          <a class="cta" href="#pricing"><i class="fas fa-file-invoice"></i> Presyo ng Pagpapagamot</a>
+          <button onclick="downloadProject()" style="padding:10px 14px;border-radius:12px;border:1px solid rgba(11,108,243,0.08);background:white;font-weight:700">I-download ang Project</button>
+        </div>
+
+        <div class="neon"></div>
+
+        <div class="glass-card">
+          <h3 style="margin:0 0 6px">Para Kanino ang Ospital?</h3>
+          <p class="muted">Pasyente, Komunidad, Medical Professionals, Mag-aaral. Nais naming maging sentro ng pag-asa at oportunidad.</p>
+        </div>
+
+      </div>
+
+      <aside class="hero-right">
+        <div class="visual glass-card">
+          <div class="floating-pulse"></div>
+          <img src="https://i.pinimg.com/736x/d1/2e/5f/d12e5fb0a7ece251f14f0fefea2282fc.jpg" alt="Gusali ng Dr. Aguilar Medical Hospital" onerror="this.src='image.jpg'">
+        </div>
+
+       
+        </div>
+      </aside>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="section">
+      <h2>Mga Serbisyo</h2>
+      <p class="muted">Komprehensibong serbisyong medikal na idinisenyo para sa bawat miyembro ng pamilya.</p>
+
+      <div class="grid" style="margin-top:12px">
+        <div class="service">
+          <h4>Serbisyong Medikal</h4>
+          <p>General check-up, konsultasyon, operasyon, laboratoryo, dental atbp.</p>
+        </div>
+        <div class="service">
+          <h4>Serbisyong Emergency</h4>
+          <p>ER, ICU, ambulansya — bukas 24/7 para sa mga kritikal na kaso.</p>
+        </div>
+        <div class="service">
+          <h4>Serbisyong Pangkalusugan</h4>
+          <p>Bakuna, maternal care, child care, mental health services.</p>
+        </div>
+        <div class="service">
+          <h4>Serbisyong Espesyal</h4>
+          <p>Cardiology, Pediatrics, Surgery, OB-Gyne, Internal Medicine.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+      <h2>Presyo ng Pagpapaospital</h2>
+      <p class="muted">Mga tipikal na presyo para sa mga serbisyo (saklaw lamang). Iayos ayon sa pangangailangan ng proyekto.</p>
+
+      <div class="pricing" style="margin-top:12px">
+        <div class="price-card">
+          <h3>Konsultasyon</h3>
+          <div class="price">General: ₱500 – ₱700</div>
+          <div class="muted">Specialist: ₱800 – ₱1,200</div>
+        </div>
+        <div class="price-card">
+          <h3>Room Rates (per day)</h3>
+          <div class="price">Private: ₱3,500 – ₱5,000</div>
+          <div class="muted">Ward → Suite available</div>
+        </div>
+        <div class="price-card">
+          <h3>Surgery</h3>
+          <div class="price">Minor: ₱5,000 – ₱15,000</div>
+          <div class="muted">Major: ₱150,000 – ₱500,000</div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px" class="grid">
+        <div class="price-card">
+          <h3>Laboratory & Diagnostics</h3>
+          <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
+            <li>CBC: ₱250 – ₱350</li>
+            <li>CT Scan: ₱6,000 – ₱10,000</li>
+            <li>MRI: ₱12,000 – ₱18,000</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <h3>Maternity Packages</h3>
+          <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
+            <li>Normal Delivery (ward): ₱20,000 – ₱35,000</li>
+            <li>Cesarean Section: ₱80,000 – ₱150,000</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Budget -->
+    <section id="budget" class="section">
+      <h2>Ano ang Sinasabi ng Aming mga Pasyente</h2>
+      <p class="muted">Repleksyon ng aming malasakit at kalidad sa pangangalaga.</p>
+
+      <div class="budget-wrap" style="margin-top:12px">
+        <div class="chart-box">
+          <canvas id="budgetChart" width="400" height="300"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h4>Ang Aming Reputasyon</h4>
+          <ul style="margin:12px 0 0;padding-left:18px;color:var(--muted)">
+            <li>5 stars</li>
+            <li>4 stars</li>
+            <li>3 stars</li>
+            <li>2 stars</li>
+            <li>1 star</li>
+          </ul>
+          <p class="muted" style="margin-top:10px">Pinagkakatiwalaan ng komunidad para sa maaasahang pangangalaga. </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <h2>Kontak at Lokasyon</h2>
+      <p class="muted">Gamitin ang form para sa demo appointment o para i-print ang project sheet.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start">
+        <div class="glass-card">
+          <form onsubmit="event.preventDefault();alert('Form demo — hindi talaga nagse-send sa project file.');">
+            <div class="contact">
+              <input placeholder="Pangalan" required>
+              <input placeholder="Telepono / Email" required>
+              <textarea placeholder="Mensaheng Para sa Ospital"></textarea>
+              <button class="cta" type="submit">Magpadala</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="glass-card">
+          <h4>Address (placeholder)</h4>
+          <p class="muted">Brgy. Example, Lungsod ng Pangalan — Ilagay ang totoong address sa final project.</p>
+          <div style="margin-top:12px">
+            <div class="muted">Emergency Hotline</div>
+            <div style="font-weight:800">(02) 1234-5678 • Ambulance: 0917-000-0000</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <div>
+      <strong>Dr. Aguilar Medical Hospital</strong>
+      <div class="muted">Layunin: De-kalidad. Maaasahan. Abot-kaya.</div>
+    </div>
+    <div class="muted">© Dr. Aguilar Medical Hospital — Project • Created for school presentation</div>
+  </footer>
+
+  <script>
+    // Budget chart (Chart.js)
+    const ctx = document.getElementById('budgetChart');
+    const budgetData = {
+      labels: ['5 stars','4 stars','3 stars','2 stars','1 star'],
+      datasets:[{
+        data:[50000000,20000000,1000000,1000000,2000000],
+        borderWidth:0,
+        hoverOffset:8
+      }]
+    };
+    const budgetChart = new Chart(ctx,{
+      type:'doughnut',
+      data:budgetData,
+      options:{
+        plugins:{legend:{position:'bottom'}},
+        cutout:'50%'
+      }
+    });
+
+    // Download project (generate a simple text summary as .txt for demo)
+    function downloadProject(){
+      const content = `Dr. Aguilar Medical Hospital - Project Summary\n\nPangalan ng Negosyo: Dr. Aguilar Medical Hospital\nLayunin: Magbigay ng de-kalidad, maaasahan, at abot-kayang serbisyong medikal.\nKabuuang Kapital: ₱50,000,000\n\n(Para sa full project print, i-copy ang page at i-paste sa MS Word o Canva. Placeholders: logo.png, hospital-building.jpg, image.jpg)`;
+      const blob = new Blob([content],{type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='Dr-Aguilar-Medical-Hospital-Project.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // small 'wow' effects: reveal on scroll
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.style.transform='translateY(0)'; e.target.style.opacity=1 });
+    },{threshold:0.1});
+    document.querySelectorAll('.glass-card, .service, .price-card').forEach(el=>{el.style.opacity=0;el.style.transform='translateY(14px)';observer.observe(el)});
+
+  </script>
+
+</body>
+</html>
